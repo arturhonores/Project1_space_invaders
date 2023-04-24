@@ -7,6 +7,12 @@ class Invaders1 {
             size: { w: 40, h: 40 },
             pos: { x: posX, y: 50 }
         }
+        this.initInvaders1()
+    }
+
+    initInvaders1() {
+        this.invaders1Instance = new Image()
+        this.invaders1Instance.src = "../images/invaders1.png"
     }
 
     drawInvaders1() {

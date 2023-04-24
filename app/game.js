@@ -13,7 +13,7 @@ const game = {
     shipInstance: undefined,
     shipSpecs: {
         pos: undefined,
-        size: { w: 100, h: 100 }
+        size: { w: 70, h: 70 }
     },
     backgroundInstance: undefined,
     backgroundSpecs: {
@@ -21,21 +21,25 @@ const game = {
         size: { w: 1000, h: 600 }
     },
     invaders1: [],
+    bullets: [],
 
+    //INIT
     init() {
         this.setContext()
         this.setImageInstances()
         this.start()
+        this.setEventListeners()
     },
-
+    // CORAZÓN
     start() {
-        setInterval(() => {
+        this.intervalId = setInterval(() => {
             this.clearAll()
             this.drawAll()
+            this.collisionInvadersShip() ? this.gameOver() : null
             this.frameIndex++
         }, 50)
     },
-
+    //CTX
     setContext() {
         this.ctx = document.getElementById("myCanvas").getContext("2d")
         this.shipSpecs.pos = {
@@ -47,18 +51,17 @@ const game = {
             y: 0
         }
     },
-
+    //METER IMÁGENES NAVE Y FONDO
     setImageInstances() {
         this.shipInstance = new Image()
-        this.shipInstance.src = "../images/falcon.png"
+        this.shipInstance.src = "../images/ship.png"
         this.backgroundInstance = new Image()
         this.backgroundInstance.src = "../images/background.jpg"
-        // dibujo invasor1. duda. ojo los specs están en la clase.
-        this.invaders1Instance = new Image()
-        this.invaders1Instance.src = "../images/invaders1.png"
+        // this.invaders1Instance = new Image()
+        // this.invaders1Instance.src = "../images/invaders1.png"
     },
 
-
+    // DIBUJAR NAVE
     drawShip() {
         this.ctx.drawImage(
             this.shipInstance,
@@ -68,6 +71,7 @@ const game = {
             this.shipSpecs.size.h
         )
     },
+    // DIBUJAR FONDO
     drawBackground() {
         this.ctx.drawImage(
             this.backgroundInstance,
@@ -78,8 +82,9 @@ const game = {
         )
     },
 
+    // CREAR INVASORES
     createInvaders1() {
-        const invaders1Xposition = [50, 110, 160, 210]
+        const invaders1Xposition = [110, 160, 210, 260, 310, 360, 410, 460, 510, 560, 610, 660, 710, 760, 810, 860]
         invaders1Xposition.forEach((duplicated) => {
             return this.invaders1.push(new Invaders1(this.ctx, this.canvasSize, this.invaders1Instance, duplicated))
         })
@@ -88,24 +93,66 @@ const game = {
         //     new Invaders1(this.ctx, this.canvasSize, this.invaders1Instance, invaders1Xposition[randomIndexPosition]))
     },
 
+    //DIBUJAR TODO
     drawAll() {
         this.drawBackground()
         this.drawShip()
-        // this.createInvaders1()
-        this.invaders1.slice(0, 4).forEach((elm) => {
-            return elm.drawInvaders1()
+        this.invaders1.slice(0, 48).forEach((eachInvader) => {
+            return eachInvader.drawInvaders1()
         })
-        if (this.frameIndex % 80 === 0) {
+        if (this.frameIndex % 50 === 0) {
             this.createInvaders1()
         }
-
+        this.bullets.forEach((eachBullet) => {
+            eachBullet.drawBullets()
+        })
+        if (this.frameIndex % 50 === 0) {
+            this.shipShoot()
+        }
 
     },
 
-
-
+    // BORRAR TODO
     clearAll() {
         this.ctx.clearRect(0, 0, this.canvasSize.w, this.canvasSize.h)
+    },
+
+    // CONTROLES NAVE
+    setEventListeners() {
+        document.onkeydown = event => {
+
+            const { key } = event
+
+            if (key == 'ArrowLeft' && this.shipSpecs.pos.x > 15) {
+                this.shipSpecs.pos.x -= 50
+            }
+
+            if (key == 'ArrowRight' && this.shipSpecs.pos.x < this.canvasSize.w - this.shipSpecs.size.w - 15) {
+                this.shipSpecs.pos.x += 50
+            }
+        }
+    },
+
+    // CREAR COLISIÓN INVADER CONTRA NAVE
+
+    collisionInvadersShip() {
+        return this.invaders1.some((inv) => {
+            return this.shipSpecs.pos.x + this.shipSpecs.size.w >= inv.invaders1Specs.pos.x &&
+                this.shipSpecs.pos.x <= inv.invaders1Specs.pos.x + inv.invaders1Specs.size.w &&
+                this.shipSpecs.pos.y + this.shipSpecs.size.h >= inv.invaders1Specs.pos.y &&
+                this.shipSpecs.pos.y <= inv.invaders1Specs.pos.y + 40
+        })
+    },
+
+    // CREAR DISPARO
+
+    shipShoot() {
+        this.bullets.push(new ShipBullets(this.ctx, this.canvasSize, this.shipBulletsInstance, 500))
+    },
+
+
+    gameOver() {
+        clearInterval(this.intervalId)
     }
 
 }
