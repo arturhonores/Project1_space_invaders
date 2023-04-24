@@ -30,3 +30,4 @@ class Invaders1 {
         this.invaders1Specs.pos.y += 1
     }
 }
+
