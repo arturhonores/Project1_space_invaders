@@ -22,7 +22,7 @@ const game = {
     },
     invaders1: [],
     bullets: [],
-
+    canShoot: true,
     //INIT
     init() {
         this.setContext()
@@ -100,15 +100,15 @@ const game = {
         this.invaders1.slice(0, 48).forEach((eachInvader) => {
             return eachInvader.drawInvaders1()
         })
-        if (this.frameIndex % 50 === 0) {
+        if (this.frameIndex % 70 === 0) {
             this.createInvaders1()
         }
         this.bullets.forEach((eachBullet) => {
             eachBullet.drawBullets()
         })
-        if (this.frameIndex % 50 === 0) {
-            this.shipShoot()
-        }
+        // if (this.frameIndex % 30 === 0) {
+        //     this.shipShoot()
+        // }
 
     },
 
@@ -124,11 +124,19 @@ const game = {
             const { key } = event
 
             if (key == 'ArrowLeft' && this.shipSpecs.pos.x > 15) {
+                console.log(this.shipSpecs.pos.x)
                 this.shipSpecs.pos.x -= 50
             }
 
             if (key == 'ArrowRight' && this.shipSpecs.pos.x < this.canvasSize.w - this.shipSpecs.size.w - 15) {
                 this.shipSpecs.pos.x += 50
+            }
+            if (key == ' ' && this.canShoot) {
+                this.shipShoot()
+                this.canShoot = false
+                setTimeout(() => {
+                    this.canShoot = true
+                }, 700) // Tiempo de espera en milisegundos
             }
         }
     },
@@ -147,7 +155,7 @@ const game = {
     // CREAR DISPARO
 
     shipShoot() {
-        this.bullets.push(new ShipBullets(this.ctx, this.canvasSize, this.shipBulletsInstance, 500))
+        this.bullets.push(new ShipBullets(this.ctx, this.canvasSize, this.shipBulletsInstance, this.shipSpecs.pos.x + 30, 585 - this.shipSpecs.size.h))
     },
 
 

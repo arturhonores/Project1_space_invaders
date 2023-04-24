@@ -1,12 +1,12 @@
 class ShipBullets {
     // constructor(ctx, canvasSize, shipBulletsInstance, shipPosX, shipW, shipH) {
-    constructor(ctx, canvasSize, shipBulletsInstance, shipH) {
+    constructor(ctx, canvasSize, shipBulletsInstance, shipX, shipH) {
         this.ctx = ctx
         this.canvasSize = canvasSize
         this.shipBulletsInstance = shipBulletsInstance
         this.shipBulletsSpecs = {
             size: { w: 10, h: 30 },
-            pos: { x: 500, y: shipH },
+            pos: { x: shipX, y: shipH },
         }
         this.velY = 10
         this.initBullets()
