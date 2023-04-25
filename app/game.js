@@ -37,9 +37,8 @@ const game = {
         this.intervalId = setInterval(() => {
             this.clearAll()
             this.drawAll()
-            this.collisionbulletShip()
             this.collisionInvadersShip() ? this.gameOver() : null
-
+            this.collisionbulletInvaders()
         }, 50)
     },
     //CTX
@@ -143,8 +142,26 @@ const game = {
     },
 
     collisionbulletInvaders() {
+        for (let i = 0; i < this.bullets.length; i++) {
+            for (let j = 0; j < this.invaders1.length; j++) {
+                if (
+                    this.bullets[i].shipBulletsSpecs.pos.x + this.bullets[i].shipBulletsSpecs.size.w >= this.invaders1[j].invaders1Specs.pos.x &&
+                    this.bullets[i].shipBulletsSpecs.pos.x <= this.invaders1[j].invaders1Specs.pos.x + this.invaders1[j].invaders1Specs.size.w &&
+                    this.bullets[i].shipBulletsSpecs.pos.y + this.bullets[i].shipBulletsSpecs.size.h >= this.invaders1[j].invaders1Specs.pos.y &&
+                    this.bullets[i].shipBulletsSpecs.pos.y <= this.invaders1[j].invaders1Specs.pos.y + this.invaders1[j].invaders1Specs.size.h
+                ) {
 
+                    // Elimina la bala y el invasor de sus respectivos arrays
+                    this.bullets.splice(i, 1);
+                    this.invaders1.splice(j, 1);
+
+                    // Detiene el bucle interno para evitar múltiples colisiones con la misma bala
+                    break;
+                }
+            }
+        }
     },
+
 
 
 
