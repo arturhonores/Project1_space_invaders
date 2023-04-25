@@ -1,5 +1,4 @@
 class ShipBullets {
-    // constructor(ctx, canvasSize, shipBulletsInstance, shipPosX, shipW, shipH) {
     constructor(ctx, canvasSize, shipBulletsInstance, shipX, shipH) {
         this.ctx = ctx
         this.canvasSize = canvasSize

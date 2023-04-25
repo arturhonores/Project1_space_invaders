@@ -22,6 +22,7 @@ const game = {
     },
     invaders1: [],
     bullets: [],
+    invadersBullets: [],
     canShoot: true,
 
     //INIT
@@ -29,6 +30,7 @@ const game = {
         this.setContext()
         this.setImageInstances()
         this.setEventListeners()
+        this.invadersShoot()
         this.createInvaders1()
         this.start()
     },
@@ -81,7 +83,6 @@ const game = {
                 new Invaders1(this.ctx, this.canvasSize, this.invaders1Instance, duplicated, 50),
                 new Invaders1(this.ctx, this.canvasSize, this.invaders1Instance, duplicated, 100),
                 new Invaders1(this.ctx, this.canvasSize, this.invaders1Instance, duplicated, 150),
-
             )
         })
 
@@ -97,6 +98,9 @@ const game = {
         })
         this.bullets.forEach((eachBullet) => {
             eachBullet.drawBullets()
+        })
+        this.invadersBullets.forEach((eachInvaderbullet) => {
+            eachInvaderbullet.drawInvadersBullet()
         })
     },
 
@@ -166,7 +170,11 @@ const game = {
         }
     },
 
-    // CREAR DISPARO
+    // CREAR DISPAROS
+
+    invadersShoot() {
+        this.invadersBullets.push(new InvadersBullet(this.ctx, this.canvasSize, this.invadersBulletsInstance, 100, 100))
+    },
     shipShoot() {
         this.bullets.push(new ShipBullets(this.ctx, this.canvasSize, this.shipBulletsInstance, this.shipSpecs.pos.x + 30, 585 - this.shipSpecs.size.h))
     },
