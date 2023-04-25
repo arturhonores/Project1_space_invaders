@@ -22,14 +22,14 @@ const game = {
     },
     invaders1: [],
     bullets: [],
-    //PUNTO SE SEGURIDAD
-
     canShoot: true,
+
     //INIT
     init() {
         this.setContext()
         this.setImageInstances()
         this.setEventListeners()
+        this.createInvaders1()
         this.start()
     },
     // CORAZÓN
@@ -75,9 +75,14 @@ const game = {
     // CREAR INVASORES
     createInvaders1() {
         console.log("CREANDO INVASORES")
-        const invaders1Xposition = [110, 160, 210, 260, 310, 360, 410, 460, 510, 560, 610, 660, 710, 760, 810, 860]
+        const invaders1Xposition = [160, 210, 260, 310, 360, 410, 460, 510, 560, 610, 660, 710, 760, 810]
         invaders1Xposition.forEach((duplicated) => {
-            return this.invaders1.push(new Invaders1(this.ctx, this.canvasSize, this.invaders1Instance, duplicated))
+            return this.invaders1.push(
+                new Invaders1(this.ctx, this.canvasSize, this.invaders1Instance, duplicated, 50),
+                new Invaders1(this.ctx, this.canvasSize, this.invaders1Instance, duplicated, 100),
+                new Invaders1(this.ctx, this.canvasSize, this.invaders1Instance, duplicated, 150),
+
+            )
         })
 
     },
@@ -87,15 +92,9 @@ const game = {
         console.log("DIBUJANDO INVASORES")
         this.frameIndex++
         this.drawShip()
-        this.invaders1.slice(0, 32).forEach((eachInvader) => {
-
+        this.invaders1.forEach((eachInvader) => {
             return eachInvader.drawInvaders1()
         })
-
-        if (this.frameIndex >= 40) {
-            this.createInvaders1();
-            this.frameIndex = 0;
-        }
         this.bullets.forEach((eachBullet) => {
             eachBullet.drawBullets()
         })
@@ -111,14 +110,14 @@ const game = {
         document.onkeydown = event => {
             const { key } = event
             if (key == 'ArrowLeft') {
-                this.shipSpecs.pos.x -= 30
+                this.shipSpecs.pos.x -= 50
                 if (this.shipSpecs.pos.x < 0) {
                     this.shipSpecs.pos.x = 0
                 }
             }
 
             if (key == 'ArrowRight') {
-                this.shipSpecs.pos.x += 30
+                this.shipSpecs.pos.x += 50
                 if (this.shipSpecs.pos.x > 1000 - this.shipSpecs.size.w) {
                     this.shipSpecs.pos.x = 1000 - this.shipSpecs.size.w
                 }
@@ -128,7 +127,7 @@ const game = {
                 this.canShoot = false
                 setTimeout(() => {
                     this.canShoot = true
-                }, 500) // Tiempo de espera en milisegundos
+                }, 500) // Tiempo de espera en milisegundos entre disparos
             }
         }
     },
@@ -166,10 +165,6 @@ const game = {
             }
         }
     },
-
-
-
-
 
     // CREAR DISPARO
     shipShoot() {
