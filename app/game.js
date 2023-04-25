@@ -22,22 +22,24 @@ const game = {
     },
     invaders1: [],
     bullets: [],
+    //PUNTO SE SEGURIDAD
+
     canShoot: true,
     //INIT
     init() {
         this.setContext()
         this.setImageInstances()
-        this.start()
         this.setEventListeners()
+        this.start()
     },
     // CORAZÓN
     start() {
         this.intervalId = setInterval(() => {
             this.clearAll()
             this.drawAll()
-            this.collisionbulletShip() ? this.gameOver() : null
+            this.collisionbulletShip()
             this.collisionInvadersShip() ? this.gameOver() : null
-            this.frameIndex++
+
         }, 50)
     },
     //CTX
@@ -56,8 +58,7 @@ const game = {
     setImageInstances() {
         this.shipInstance = new Image()
         this.shipInstance.src = "../images/ship.png"
-        // this.backgroundInstance = new Image()
-        // this.backgroundInstance.src = "../images/background.jpg"
+
     },
 
     // DIBUJAR NAVE
@@ -70,16 +71,7 @@ const game = {
             this.shipSpecs.size.h
         )
     },
-    // DIBUJAR FONDO
-    // drawBackground() {
-    //     this.ctx.drawImage(
-    //         this.backgroundInstance,
-    //         this.backgroundSpecs.pos.x,
-    //         this.backgroundSpecs.pos.y,
-    //         this.backgroundSpecs.size.w,
-    //         this.backgroundSpecs.size.h
-    //     )
-    // },
+
 
     // CREAR INVASORES
     createInvaders1() {
@@ -91,13 +83,16 @@ const game = {
 
     //DIBUJAR TODO
     drawAll() {
-        // this.drawBackground()
+        this.frameIndex++
         this.drawShip()
         this.invaders1.slice(0, 48).forEach((eachInvader) => {
             return eachInvader.drawInvaders1()
         })
-        if (this.frameIndex % 70 === 0) {
-            this.createInvaders1()
+
+
+        if (this.frameIndex >= 60) {
+            this.createInvaders1();
+            this.frameIndex = 0;
         }
         this.bullets.forEach((eachBullet) => {
             eachBullet.drawBullets()
@@ -121,13 +116,12 @@ const game = {
             }
 
             if (key == 'ArrowRight') {
-                console.log(this.shipSpecs.pos.x)
                 this.shipSpecs.pos.x += 30
                 if (this.shipSpecs.pos.x > 1000 - this.shipSpecs.size.w) {
                     this.shipSpecs.pos.x = 1000 - this.shipSpecs.size.w
                 }
             }
-            if (key == ' ' && this.canShoot) {
+            if (key == 'ArrowUp' && this.canShoot) {
                 this.shipShoot()
                 this.canShoot = false
                 setTimeout(() => {
@@ -139,6 +133,7 @@ const game = {
 
     // COLISIONES
     collisionInvadersShip() {
+        console.log("MÉTODO COLISIÓN INVADER vs NAVE")
         return this.invaders1.some((inv) => {
             return this.shipSpecs.pos.x + this.shipSpecs.size.w >= inv.invaders1Specs.pos.x &&
                 this.shipSpecs.pos.x <= inv.invaders1Specs.pos.x + inv.invaders1Specs.size.w &&
@@ -147,22 +142,12 @@ const game = {
         })
     },
 
-    collisionbulletShip() {
-        let collisionDetected = false
-        this.bullets.forEach((bullet, bulletIndex) => {
-            if (
-                bullet.bulletsSpecs.pos.y <= this.shipSpecs.pos.y + this.shipSpecs.size.h &&
-                bullet.bulletsSpecs.pos.y + bullet.bulletsSpecs.size.h >= this.shipSpecs.pos.y &&
-                bullet.bulletsSpecs.pos.x + bullet.bulletsSpecs.size.w >= this.shipSpecs.pos.x &&
-                bullet.bulletsSpecs.pos.x <= this.shipSpecs.pos.x + this.shipSpecs.size.w
-            ) {
-                collisionDetected = true
-                bullet.shouldRemove = true
-            }
-        })
-        this.bullets = this.bullets.filter((bullet) => !bullet.shouldRemove)
-        return collisionDetected
+    collisionbulletInvaders() {
+
     },
+
+
+
 
     // CREAR DISPARO
     shipShoot() {

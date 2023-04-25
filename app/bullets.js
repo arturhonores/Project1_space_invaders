@@ -15,7 +15,7 @@ class ShipBullets {
     initBullets() {
         this.shipBulletsInstance = new Image()
         this.shipBulletsInstance.src = "../images/bullet.png"
-        console.log("FUNCIONA INITBULLETS")
+        console.log("MÉTODO DISPARO NAVE")
     }
 
     drawBullets() {
