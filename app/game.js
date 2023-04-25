@@ -74,22 +74,25 @@ const game = {
 
     // CREAR INVASORES
     createInvaders1() {
+        console.log("CREANDO INVASORES")
         const invaders1Xposition = [110, 160, 210, 260, 310, 360, 410, 460, 510, 560, 610, 660, 710, 760, 810, 860]
         invaders1Xposition.forEach((duplicated) => {
             return this.invaders1.push(new Invaders1(this.ctx, this.canvasSize, this.invaders1Instance, duplicated))
         })
+
     },
 
     //DIBUJAR TODO
     drawAll() {
+        console.log("DIBUJANDO INVASORES")
         this.frameIndex++
         this.drawShip()
-        this.invaders1.slice(0, 48).forEach((eachInvader) => {
+        this.invaders1.slice(0, 32).forEach((eachInvader) => {
+
             return eachInvader.drawInvaders1()
         })
 
-
-        if (this.frameIndex >= 60) {
+        if (this.frameIndex >= 40) {
             this.createInvaders1();
             this.frameIndex = 0;
         }
@@ -132,7 +135,7 @@ const game = {
 
     // COLISIONES
     collisionInvadersShip() {
-        console.log("MÉTODO COLISIÓN INVADER vs NAVE")
+        // console.log("MÉTODO COLISIÓN INVADER vs NAVE")
         return this.invaders1.some((inv) => {
             return this.shipSpecs.pos.x + this.shipSpecs.size.w >= inv.invaders1Specs.pos.x &&
                 this.shipSpecs.pos.x <= inv.invaders1Specs.pos.x + inv.invaders1Specs.size.w &&
@@ -142,8 +145,10 @@ const game = {
     },
 
     collisionbulletInvaders() {
+        // console.log("BUSCANDO COLISION BALA CONTRA INVADER")
         for (let i = 0; i < this.bullets.length; i++) {
             for (let j = 0; j < this.invaders1.length; j++) {
+                //HITBOX
                 if (
                     this.bullets[i].shipBulletsSpecs.pos.x + this.bullets[i].shipBulletsSpecs.size.w >= this.invaders1[j].invaders1Specs.pos.x &&
                     this.bullets[i].shipBulletsSpecs.pos.x <= this.invaders1[j].invaders1Specs.pos.x + this.invaders1[j].invaders1Specs.size.w &&
