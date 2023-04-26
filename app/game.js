@@ -40,6 +40,7 @@ const game = {
             this.clearAll()
             this.drawAll()
             this.collisionInvadersShip() ? this.gameOver() : null
+            this.collisionInvadersWeapon() ? this.gameOver() : null
             this.collisionbulletInvaders()
             this.invadersShoot()
         }, 50)
@@ -77,8 +78,9 @@ const game = {
 
     // CREAR INVASORES
     createInvaders1() {
-        console.log("CREANDO INVASORES")
-        const invaders1Xposition = [160, 210, 260, 310, 360, 410, 460, 510, 560, 610, 660, 710, 760, 810]
+        console.log("INSTANCIA INVASORES Y DETECTA POSICIÓN")
+        // const invaders1Xposition = [160, 210, 260, 310, 360, 410, 460, 510, 560, 610, 660, 710, 760, 810]
+        const invaders1Xposition = [90, 160, 230, 300, 370, 440, 510, 580, 650, 720, 790, 860, 930]
         invaders1Xposition.forEach((duplicated) => {
             return this.invaders1.push(
                 new Invaders1(this.ctx, this.canvasSize, this.invaders1Instance, duplicated, 50),
@@ -115,14 +117,14 @@ const game = {
         document.onkeydown = event => {
             const { key } = event
             if (key == 'ArrowLeft') {
-                this.shipSpecs.pos.x -= 50
+                this.shipSpecs.pos.x -= 35
                 if (this.shipSpecs.pos.x < 0) {
                     this.shipSpecs.pos.x = 0
                 }
             }
 
             if (key == 'ArrowRight') {
-                this.shipSpecs.pos.x += 50
+                this.shipSpecs.pos.x += 35
                 if (this.shipSpecs.pos.x > 1000 - this.shipSpecs.size.w) {
                     this.shipSpecs.pos.x = 1000 - this.shipSpecs.size.w
                 }
@@ -169,20 +171,24 @@ const game = {
         }
     },
 
+    collisionInvadersWeapon() {
+        // console.log("MÉTODO COLISIÓN INVADERWEAPON vs NAVE")
+        return this.invadersBullets.some((invBullet) => {
+            return this.shipSpecs.pos.x + this.shipSpecs.size.w >= invBullet.invadersBulletSpecs.pos.x &&
+                this.shipSpecs.pos.x <= invBullet.invadersBulletSpecs.pos.x + invBullet.invadersBulletSpecs.size.w &&
+                this.shipSpecs.pos.y + this.shipSpecs.size.h >= invBullet.invadersBulletSpecs.pos.y &&
+                this.shipSpecs.pos.y - 15 <= invBullet.invadersBulletSpecs.pos.y
+        })
+    },
+
     // CREAR DISPAROS
     invadersShoot() {
         if (this.invadersCanShoot) {
             this.invadersCanShoot = false
-            // for (let i = 0; i < this.invaders1.length; i++) {
-            //     const currentInvader = this.invaders1[i]
-            //     const bulletPosX = currentInvader.invaders1Specs.pos.x + currentInvader.invaders1Specs.size.w / 2 - 10
-            //     const bulletPosY = currentInvader.invaders1Specs.pos.y + currentInvader.invaders1Specs.size.h / 2
-            //     this.invadersBullets.push(new InvadersBullet(this.ctx, this.canvasSize, this.invadersBulletsInstance, bulletPosX, bulletPosY))
-            // }
             const currentInvader = this.invaders1[Math.floor(Math.random() * this.invaders1.length)]
-            const bulletPosX = currentInvader.invaders1Specs.pos.x + currentInvader.invaders1Specs.size.w / 2 - 10
-            const bulletPosY = currentInvader.invaders1Specs.pos.y + currentInvader.invaders1Specs.size.h / 2
-            this.invadersBullets.push(new InvadersBullet(this.ctx, this.canvasSize, this.invadersBulletsInstance, bulletPosX, bulletPosY))
+            const invaderBulletPosX = currentInvader.invaders1Specs.pos.x + currentInvader.invaders1Specs.size.w / 2 - 3 //3 es la mitad del ancho de la bala.
+            const invaderBulletPosY = currentInvader.invaders1Specs.pos.y + currentInvader.invaders1Specs.size.h / 2
+            this.invadersBullets.push(new InvadersBullet(this.ctx, this.canvasSize, this.invadersBulletsInstance, invaderBulletPosX, invaderBulletPosY))
 
             setTimeout(() => {
                 this.invadersCanShoot = true
