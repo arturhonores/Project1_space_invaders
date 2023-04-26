@@ -7,7 +7,7 @@ const game = {
     ctx: undefined,
     frameIndex: 0,
     canvasSize: {
-        w: 1000,
+        w: 980,
         h: 600
     },
     shipInstance: undefined,
@@ -15,14 +15,10 @@ const game = {
         pos: { x: undefined, y: undefined },
         size: { w: 70, h: 70 }
     },
-    backgroundInstance: undefined,
-    backgroundSpecs: {
-        pos: undefined,
-        size: { w: 1000, h: 600 }
-    },
     invaders1: [],
     bullets: [],
     invadersBullets: [],
+    gameOverAlert: undefined,
     canShoot: true,
     invadersCanShoot: true,
 
@@ -44,6 +40,7 @@ const game = {
             this.collisionBottom() ? this.gameOver() : null
             this.collisionbulletInvaders()
             this.invadersShoot()
+
         }, 50)
     },
     //CTX
@@ -53,15 +50,13 @@ const game = {
             x: this.canvasSize.w / 2 - this.shipSpecs.size.w / 2,
             y: this.canvasSize.h - this.shipSpecs.size.h
         }
-        this.backgroundSpecs.pos = {
-            x: 0,
-            y: 0
-        }
     },
     //METER IMÁGENES NAVE Y FONDO
     setImageInstances() {
         this.shipInstance = new Image()
         this.shipInstance.src = "../images/ship.png"
+        this.gameOverAlert1()
+
 
     },
 
@@ -79,9 +74,8 @@ const game = {
 
     // CREAR INVASORES
     createInvaders1() {
-        console.log("INSTANCIA INVASORES Y DETECTA POSICIÓN")
-        // const invaders1Xposition = [160, 210, 260, 310, 360, 410, 460, 510, 560, 610, 660, 710, 760, 810]
-        const invaders1Xposition = [90, 160, 230, 300, 370, 440, 510, 580, 650, 720, 790, 860, 930]
+        // console.log("INSTANCIA INVASORES Y DETECTA POSICIÓN")
+        const invaders1Xposition = [60, 130, 200, 270, 340, 410, 480, 550, 620, 690, 760, 830, 900]
         invaders1Xposition.forEach((duplicated) => {
             return this.invaders1.push(
                 new Invaders1(this.ctx, this.canvasSize, this.invaders1Instance, duplicated, 50),
@@ -183,11 +177,9 @@ const game = {
     },
 
     collisionBottom() {
+        console.log("MÉTODO COLISIÓN INVADER vs BOTTOM")
         return this.invaders1.some((inv) => {
-            return this.canvasSize.h >= inv.invaders1Specs.pos.x &&
-                this.canvasSize.h <= inv.invaders1Specs.pos.x + inv.invaders1Specs.size.w &&
-                this.canvasSize.h >= inv.invaders1Specs.pos.y &&
-                this.canvasSize.h <= inv.invaders1Specs.pos.y + 40 //40 = altura invaders
+            return inv.invaders1Specs.pos.y + inv.invaders1Specs.size.h >= this.canvasSize.h
         })
     },
 
@@ -211,9 +203,13 @@ const game = {
         this.bullets.push(new ShipBullets(this.ctx, this.canvasSize, this.shipBulletsInstance, this.shipSpecs.pos.x + 30, 585 - this.shipSpecs.size.h))
     },
 
+    gameOverAlert1() {
+        this.gameOverAlert = new gameOverImages(this.ctx, this.canvasSize, this.gameOverInstance)
+    },
+
 
     gameOver() {
         clearInterval(this.intervalId)
+        this.gameOverAlert.drawKilledImage()
     }
-
 }
