@@ -194,7 +194,7 @@ const game = {
 
             setTimeout(() => {
                 this.invadersCanShoot = true
-            }, 1000)
+            }, 900)
         }
     },
 
