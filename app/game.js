@@ -41,6 +41,7 @@ const game = {
             this.drawAll()
             this.collisionInvadersShip() ? this.gameOver() : null
             this.collisionInvadersWeapon() ? this.gameOver() : null
+            this.collisionBottom() ? this.gameOver() : null
             this.collisionbulletInvaders()
             this.invadersShoot()
         }, 50)
@@ -178,6 +179,15 @@ const game = {
                 this.shipSpecs.pos.x <= invBullet.invadersBulletSpecs.pos.x + invBullet.invadersBulletSpecs.size.w &&
                 this.shipSpecs.pos.y + this.shipSpecs.size.h >= invBullet.invadersBulletSpecs.pos.y &&
                 this.shipSpecs.pos.y - 15 <= invBullet.invadersBulletSpecs.pos.y
+        })
+    },
+
+    collisionBottom() {
+        return this.invaders1.some((inv) => {
+            return this.canvasSize.h >= inv.invaders1Specs.pos.x &&
+                this.canvasSize.h <= inv.invaders1Specs.pos.x + inv.invaders1Specs.size.w &&
+                this.canvasSize.h >= inv.invaders1Specs.pos.y &&
+                this.canvasSize.h <= inv.invaders1Specs.pos.y + 40 //40 = altura invaders
         })
     },
 
