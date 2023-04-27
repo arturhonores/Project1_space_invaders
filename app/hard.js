@@ -1,21 +1,22 @@
 class Hard {
-    constructor(ctx, canvasSize, invaders1Instance, posX, posY) {
+    constructor(ctx, canvasSize, hardInstance, posY, size, speed) {
         this.ctx = ctx
         this.canvasSize = canvasSize
         this.hardInstance = hardInstance
         this.hardSpecs = {
-            size: { w: 40, h: 40 },
-            pos: { x: posX, y: posY }
+            size: { w: size, h: size },
+            pos: { x: 0, y: posY },
+            speed: speed
         }
-        this.levelUp()
+        this.hard()
     }
 
-    levelUp() {
+    hard() {
         this.hardInstance = new Image()
         this.hardInstance.src = "../images/hard.png"
     }
 
-    drawLevelUp() {
+    drawHard() {
         this.move()
         this.ctx.drawImage(
             this.hardInstance,
@@ -24,5 +25,9 @@ class Hard {
             this.hardSpecs.size.w,
             this.hardSpecs.size.h
         )
+    }
+
+    move() {
+        this.hardSpecs.pos.x += this.hardSpecs.speed
     }
 }

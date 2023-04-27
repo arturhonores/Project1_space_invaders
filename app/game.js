@@ -18,6 +18,7 @@ const game = {
     invaders1: [],
     bullets: [],
     invadersBullets: [],
+    hardArr: [],
     gameOverAlert: undefined,
     youWin: undefined,
     canShoot: true,
@@ -26,6 +27,7 @@ const game = {
     //INIT
     init() {
         this.setContext()
+        setTimeout(() => this.createHard(), 14000)
         this.setImageInstances()
         this.setEventListeners()
         this.createInvaders1()
@@ -119,6 +121,14 @@ const game = {
 
     },
 
+    // pintar Hard y que aparezca
+    createHard() {
+        console.log("HARRDDDDDDDD")
+        this.hardArr.push(
+            new Hard(this.ctx, this.canvasSize, this.hardInstance, 10, 100, 3)
+        )
+    },
+
     //DIBUJAR TODO
     drawAll() {
         // console.log("DIBUJANDO INVASORES")
@@ -133,7 +143,13 @@ const game = {
         this.invadersBullets.forEach((eachInvaderbullet) => {
             eachInvaderbullet.drawInvadersBullet()
         })
+        this.hardArr.forEach((eachHard) => {
+            eachHard.drawHard()
+        })
     },
+
+
+
 
     // BORRAR TODO
     clearAll() {
@@ -230,7 +246,7 @@ const game = {
 
             let shootingInterval
             if (timeElapsed >= 13000) {
-                shootingInterval = 550
+                shootingInterval = 450
             } else {
                 shootingInterval = 700
             }
