@@ -19,6 +19,7 @@ const game = {
     bullets: [],
     invadersBullets: [],
     gameOverAlert: undefined,
+    youWin: undefined,
     canShoot: true,
     invadersCanShoot: true,
 
@@ -28,6 +29,7 @@ const game = {
         this.setImageInstances()
         this.setEventListeners()
         this.createInvaders1()
+        this.startSound()
         this.start()
     },
     // CORAZÓN
@@ -40,9 +42,32 @@ const game = {
             this.collisionBottom() ? this.gameOver() : null
             this.collisionbulletInvaders()
             this.invadersShoot()
-
+            this.invaders1.length === 0 ? this.levelComplete() : null
         }, 50)
     },
+
+    //MÚSICAS
+    startSound() {
+        this.backgroundSound = new Audio()
+        this.backgroundSound.src = './audio/backgroundSound.mp3'
+        this.backgroundSound.volume = 1
+        this.backgroundSound.play()
+    },
+
+    shootSound() {
+        this.disparonave = new Audio()
+        this.disparonave.src = './audio/disparonave.mp3'
+        this.disparonave.volume = 0.7
+        this.disparonave.play()
+    },
+
+    gameOverSound() {
+        this.gameoversound = new Audio()
+        this.gameoversound.src = './audio/gameoversound.mp3'
+        this.gameoversound.volume = 0.7
+        this.gameoversound.play()
+    },
+
     //CTX
     setContext() {
         this.ctx = document.getElementById("myCanvas").getContext("2d")
@@ -56,7 +81,7 @@ const game = {
         this.shipInstance = new Image()
         this.shipInstance.src = "../images/ship.png"
         this.gameOverAlert1()
-
+        this.youWinAlert()
 
     },
 
@@ -120,8 +145,8 @@ const game = {
 
             if (key == 'ArrowRight') {
                 this.shipSpecs.pos.x += 35
-                if (this.shipSpecs.pos.x > 1000 - this.shipSpecs.size.w) {
-                    this.shipSpecs.pos.x = 1000 - this.shipSpecs.size.w
+                if (this.shipSpecs.pos.x > 980 - this.shipSpecs.size.w) {
+                    this.shipSpecs.pos.x = 980 - this.shipSpecs.size.w
                 }
             }
             if (key == 'ArrowUp' && this.canShoot) {
@@ -201,15 +226,28 @@ const game = {
     shipShoot() {
         console.log("nave dispara")
         this.bullets.push(new ShipBullets(this.ctx, this.canvasSize, this.shipBulletsInstance, this.shipSpecs.pos.x + 30, 585 - this.shipSpecs.size.h))
+        this.shootSound()
     },
 
     gameOverAlert1() {
         this.gameOverAlert = new gameOverImages(this.ctx, this.canvasSize, this.gameOverInstance)
     },
 
+    youWinAlert() {
+        this.youWin = new YouWin(this.ctx, this.canvasSize, this.youWinInstance)
+    },
+
 
     gameOver() {
         clearInterval(this.intervalId)
+        this.gameOverSound()
         this.gameOverAlert.drawKilledImage()
+        this.backgroundSound.pause()
+    },
+
+    levelComplete() {
+        clearInterval(this.intervalId)
+        this.youWin.drawYouwinImage()
+
     }
 }
