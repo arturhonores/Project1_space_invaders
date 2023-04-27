@@ -229,8 +229,8 @@ const game = {
             const timeElapsed = currentTime - this.startTime
 
             let shootingInterval
-            if (timeElapsed > 140000) {
-                shootingInterval = 100
+            if (timeElapsed >= 13000) {
+                shootingInterval = 550
             } else {
                 shootingInterval = 700
             }
@@ -265,7 +265,6 @@ const game = {
 
     levelComplete() {
         clearInterval(this.intervalId)
-        //PENDIENTE AQUÍ SONIDO WIN
         this.youWin.drawYouwinImage()
         this.backgroundSound.pause()
         this.victorySound()
