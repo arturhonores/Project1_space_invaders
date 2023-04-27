@@ -1,10 +1,10 @@
 class Hard {
-    constructor(ctx, canvasSize, hardInstance, posY, size, speed) {
+    constructor(ctx, canvasSize, hardInstance, posY, sizeW, sizeH, speed) {
         this.ctx = ctx
         this.canvasSize = canvasSize
         this.hardInstance = hardInstance
         this.hardSpecs = {
-            size: { w: size, h: size },
+            size: { w: sizeW, h: sizeH },
             pos: { x: 0, y: posY },
             speed: speed
         }

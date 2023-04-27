@@ -125,7 +125,7 @@ const game = {
     createHard() {
         console.log("HARRDDDDDDDD")
         this.hardArr.push(
-            new Hard(this.ctx, this.canvasSize, this.hardInstance, 10, 100, 3)
+            new Hard(this.ctx, this.canvasSize, this.hardInstance, 10, 200, 40, 3)
         )
     },
 
