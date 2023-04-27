@@ -61,6 +61,7 @@ const game = {
         this.disparonave = new Audio()
         this.disparonave.src = './audio/disparonave.mp3'
         this.disparonave.volume = 0.9
+        this.backgroundSound.loop = true;
         this.disparonave.play()
     },
 
