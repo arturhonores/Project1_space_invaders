@@ -30,6 +30,7 @@ const game = {
         this.setEventListeners()
         this.createInvaders1()
         this.startSound()
+        this.startTime = new Date().getTime();
         this.start()
     },
     // CORAZÓN
@@ -66,6 +67,13 @@ const game = {
         this.gameoversound.src = './audio/gameoversound.mp3'
         this.gameoversound.volume = 1
         this.gameoversound.play()
+    },
+
+    victorySound() {
+        this.victorysound = new Audio()
+        this.victorysound.src = './audio/victoria.mp3'
+        this.victorysound.volume = 1
+        this.victorysound.play()
     },
 
     //CTX
@@ -113,7 +121,7 @@ const game = {
 
     //DIBUJAR TODO
     drawAll() {
-        console.log("DIBUJANDO INVASORES")
+        // console.log("DIBUJANDO INVASORES")
         this.frameIndex++
         this.drawShip()
         this.invaders1.forEach((eachInvader) => {
@@ -202,7 +210,7 @@ const game = {
     },
 
     collisionBottom() {
-        console.log("MÉTODO COLISIÓN INVADER vs BOTTOM")
+        // console.log("MÉTODO COLISIÓN INVADER vs BOTTOM")
         return this.invaders1.some((inv) => {
             return inv.invaders1Specs.pos.y + inv.invaders1Specs.size.h >= this.canvasSize.h
         })
@@ -217,14 +225,24 @@ const game = {
             const invaderBulletPosY = currentInvader.invaders1Specs.pos.y + currentInvader.invaders1Specs.size.h / 2
             this.invadersBullets.push(new InvadersBullet(this.ctx, this.canvasSize, this.invadersBulletsInstance, invaderBulletPosX, invaderBulletPosY))
 
+            const currentTime = new Date().getTime()
+            const timeElapsed = currentTime - this.startTime
+
+            let shootingInterval
+            if (timeElapsed > 140000) {
+                shootingInterval = 100
+            } else {
+                shootingInterval = 700
+            }
+
             setTimeout(() => {
                 this.invadersCanShoot = true
-            }, 900)
+            }, shootingInterval)
         }
     },
 
     shipShoot() {
-        console.log("nave dispara")
+        // console.log("nave dispara")
         this.bullets.push(new ShipBullets(this.ctx, this.canvasSize, this.shipBulletsInstance, this.shipSpecs.pos.x + 30, 585 - this.shipSpecs.size.h))
         this.shootSound()
     },
@@ -247,7 +265,10 @@ const game = {
 
     levelComplete() {
         clearInterval(this.intervalId)
+        //PENDIENTE AQUÍ SONIDO WIN
         this.youWin.drawYouwinImage()
+        this.backgroundSound.pause()
+        this.victorySound()
 
     }
 }
