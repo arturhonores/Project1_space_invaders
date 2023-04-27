@@ -57,14 +57,14 @@ const game = {
     shootSound() {
         this.disparonave = new Audio()
         this.disparonave.src = './audio/disparonave.mp3'
-        this.disparonave.volume = 0.7
+        this.disparonave.volume = 0.9
         this.disparonave.play()
     },
 
     gameOverSound() {
         this.gameoversound = new Audio()
         this.gameoversound.src = './audio/gameoversound.mp3'
-        this.gameoversound.volume = 0.7
+        this.gameoversound.volume = 1
         this.gameoversound.play()
     },
 
